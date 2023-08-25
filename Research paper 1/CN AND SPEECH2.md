@@ -1,94 +1,166 @@
 
-# SpeechStew :Simply Mix All Available Speech Recognition Data to Train One Large Neural Network
+# Speech to SQL Generator - A Voice Based Approach
 
 **Abstract:**
 
-* We present SpeechStew, a speech recognition model that is trained on a combination of various publicly available speech recognition datasets: AMI, Broadcast News, Common Voice, LibriSpeech, Switchboard/Fisher, Tedlium, and Wall Street Journal.
-* SpeechStew simply mixes all of these datasets together, without any special re-weighting or re-balancing of the datasets.
-* SpeechStew achieves SoTA or near SoTA results across a variety of tasks, without the use of an external language model.
-* Our results include 9.0% WER on AMI-IHM, 4.7% WER on Switchboard, 8.3% WER on CallHome, and 1.3% on WSJ, which significantly outperforms prior work with strong external language models.
-* We also demonstrate that SpeechStew learns powerful transfer learning representations. 
-* We fine-tune SpeechStew on a noisy low resource speech dataset, CHiME-6. We achieve 38.9% WER without a language model,which compares to 38.6% WER to a strong HMM baseline with a language model.
-* Index Terms: end-to-end speech recognition, multi-domain speech recognition
+* Recent developments in speech recognition system and natural language processing have given rise to
+a new generation of powerful voice-based interfaces. In this proposed system, a user interacts with the system through a voice-based user interface to fetch the desired results.
+* To make the system smooth and interactive, the query is based on casual human speech / conversation. The spoken
+query undergoes many steps to arrive at the final results. 
+* It includes synonym table which is used to convert the spoken query into SQL keywords. This proposed work will give the good results for simple and complex queries. 
+* The accuracy of the system depends on the complexity of the database.
+* This system will show that the voice-based user interface is an effective means of querying and fetching data from the stored database.
+* Keywords: NLP, Speech, Speech to SQL, SQL, SQL generator, Synonym table. 
 
 **Introduction:**
 
-End-to-end speech recognition models have seen remarkable success in recent years. For instance, end-to-end speechrecognition models have achieved state-of-the-art (SoTA) results on LibriSpeech and large proprietary datasets.
-Thesuccess of these methods have often been attributed to the abundance of training data and the use of large deep models.
-However, on noisy, low resource speech recognition datasets, such as CHiME-6 , where overfitting is a significant problem, end-to-end methods tend to struggle relative to HMMbased baselines.
- For example, the best previously published end-to-end model achieved 49.0% WER on the CHiME-6 dev set, while the best HMM model achieves 36.9% WER.
-Multi-lingual training, multi-domain training, unsupervised pre-training, semi-supervised learningand transfer learning are some techniques proposed in the literature to enhance generalization.
-These methods optimize speech recognition models on data from related tasks (typically of high resource), to help the specific task of interest (typically of low resource).
-* This paper presents SpeechStew. SpeechStew is a simple approach to end-to-end speech recognition, which leverages
-both multi-domain training and transfer learning.
-SpeechStew follows the following simple recipe:
-1. Combine all available speech recognition data without
-any domain-dependent re-balancing or re-weighting.
-2. Train a single large neural network (a 100M or 1B parameter model) on the combined data.
-Our method does not utilize any domain labels, or introduce any additional hyperparameters for combining the data.
+Speech recognition has become an essential part of a system with the fast growing technology. These interactive applications should be able to process the human communicating language queries. 
+Natural Language Processing is the field of study that focuses on the interactions between human language and computers.
+ It sits at the intersection of computer science, artificial intelligence, and computational. The spoken query
+undergoes many steps to arrive at the final results.
+Recent advances in voice-based interfaces, like Apple’s Siri, Google assistant. When used with database systems, voicebased interfaces provide an effective way to query and fetch data. 
+A major advantage over classical query interfaces or even touch-based visual interfaces is that voice-based interfaces are completely hands-free.
 
 **Literature Review:**
 
-SpeechStew uses the Conformer 
-* RNN-T  architecture. We experiment with both the 100M
-parameter  and the 1B parameter configuration. We find
-that wav2vec pre-training  is needed to train the 1B parameter model.
-* We apply the default hyperparameters from prior work including the learning rate schedule. 
-We do not incorporate an external language model and does Multi-domain Training.
+* Kumar et al. [6] proposed system which uses the knowledge ofunderlying database and generate lex file automatically, which will be used while tokenizing the words involved in English text query and since lex file contains underlying database
+information like column and table names.
+* So, automatic
+generation of lex file helps in making the system database
+independent. 
+* In first phase of this work, speech is converted into
+text, Second phase analyses the text whether it is syntactically
+correct or not based on grammar rules for valid queries, In
+third phase text is mapped into an intermediate query using
+lexer, parser and syntax directed translation, In fourth phase
+we extract the SELECT clause and WHERE clause from the
+intermediate query, In fifth phase we find all the required tables
+to form the FROM clause and thus SQL query is formed, In
+sixth phase formulated SQL query is fired to database and result
+is obtained. 
+* This System has been checked for single tables and
+multiple tables and it gives correct result if the input query is
+syntactically consistent with the Syntactic Rules.
+* Salma Jamoussi et al.[7] proposed statistical approach which
+constitutes the most used method for resolving the speech
+understanding problem. For this, they use a Bayesian network
+for unsupervised classification, called Auto Class and we expose
+three methods for the vector representation of words, these
+representations aim to help the Bayesian network to build up
+efficient concepts.
+* We test this method on two applications data
+and we compare the Bayesian network performances with those
+obtained by the Kohonen maps and the K-means algorithm.
+* Then, we will describe the last stage of our understanding
+process, in which we label the user requests and we generate the 
 
 **Model Architecture:**
 
-* In this implementation, SpeechStew uses the Conformer RNN-T architecture. We experiment with both the 100M
-parameter and the 1B parameter configuration.
-* We find that wav2vec pre-training is needed to train the 1B parameter model. 
-* We apply the default hyperparameters from prior work including the learning rate schedule. We do not
-incorporate an external language model.
+ # System Design
+* The system accepts the spoken query as its input and it is sent to
+speech recognition engine, the output of that phase will be the
+input text query which is in the mixed format. 
+* The correct input
+query is extracted and further sent to tokenisation. Tokenisation
+is the method of splitting the sentence into individual words
+and storing it in the list. Unwanted tokens are removed after
+storing it in the list. 
+* The tokens are mapped with the pre stored
+synonym database which contains the words with its synonyms.
+The refined text is then sent to text translator.
+* Text translator
+contains clause extractor and mapper. Through which an
+intermediate query is being generated and tokens are mapped
+with the table name and attribute.
+* The result of this phase is
+the SQL query. This SQL query is operated on the database and
+correct results is being displayed on the interface.
+* The SQL
+query will be displayed on to the command prompt.In the system, multiple where clauses are also supported. Inner
+join operation takes place. The primary and foreign keys are
+compared to remove the redundant bits and correct result is
+being obtained.
 
 **Methodology:**
 
-#Multi-domain Training
-* We combine the following datasets without any form of reweighting or resampling to construct the training set for SpeechStew:
-1.AMI is approximately 100 hours of meeting recordings.
-2. Common Voice. Common Voice is a crowd-sourced open licensed speech dataset. We use the version 5.1 (June 22 2020) snapshot with approximately 1500 hours.
-The data was collected at 48 KHz, and we resampled it to 16 KHz.
-3. English Broadcast News (LDC97S44, LDC97T22, LDC98S71, LDC98T28). English Broadcast News is approximately 50 hours of television news.
-4. LibriSpeech is approximately 960 hours of speech from audiobooks.
-5. Switchboard/Fisher (LDC2004T19, LDC2005T19, LDC2004S13, LDC2005S13, LDC97S62). Switchboard/Fisher is approximately 2000 hours of telephone conversations. The data was collected at 8 KHz, and we upsampled it to 16 KHz.
-6. TED-LIUM v3 [33, 34]. TED-LIUM is approximately 450 hours of TED talks.
-7. Wall Street Journal (LDC93S6B, LDC94S13B). WSJ is approximately 80 hours of clean speech.
+* Step 1. Accept the input from the user in the form of
+speech.
+* Step 2. The speech is converted into text by using speech
+recognition engine.
+* Step 3. The correct form of the statement is saved and
+other statements are discarded.
+* Step 4. Divide the input query and store it in a list, i.e.
+tokenising the input query statement.
+* Step 5. Remove the unnecessary token from the list like,
+the, an, etc.
+* Step 6. Map the tokens with the table name and attributes
+of the database.
+* Step 7. Now find the tables which will contain the pair of
+((attribute which do not belong to the table in the query),
+(other attributes present in the table in the query)).
+* Step 8. For a natural join, find out the common attribute
+and form the inner query. Then form the outer query according to the different conditions. Merge both of them
+and generate the final query.
+* Step 9. For a simple query, generate the final query by
+checking the all conditions.
+* Step 10. Obtain the conditions of the where clause and
+other clause such as comparators, aggregate function and
+relational operators, add these to the final query.
+* Step 11. Print the final query on command prompt and
+display results on UI..
 
-**Results:**
+**Results and Discussion:**
 
-We make two observations regarding the effectiveness of SpeechStew on ChiME-6 in particular.
-* The first is that the amount of training time spent on the low-resource CHiME-6 data is greatly reduced. 
-This is a natural product of the finetuning process. 
-However, SpeechStew’s construction allows us to skip to that stage of the training process, thus reducing the risk of overfitting.
-* Secondly, SpeechStew appears to be robust enough to handle noisy data. SpeechStew spends more time learning the salient features from a larger pool of less noisy data, and less time working with the more noisy CHiME-6 data.
+* The results are drawn based on the query execution rate. The
+system is been tested on a college database containing 2, 3, 4
+tables. 
+* The interface is the voice based interface which allow
+you to start speaking after a click on the button and ‘done’ is the
+word to end the speech.
+* The results are displayed on the UI and
+the query is displayed on the command prompt.
+* The system is tested for 3 different database varying from 2 to
+4 tables.
+* The efficiency of the system reduces as the number of tables
+increases.
+* The following types of queries are tested and results are being
+listed,
+∑ Type 1 - Simple query operation.
+∑ Type 2 - Join operation with no condition.
+∑ Type 3 - Join operation with multiple conditions.
+∑ Type 4 - Join operation with comparators.
+∑ Type 5 - Having and like clauses.
+∑ Type 6 - Multiple Join with multiple where conditions.
+The Table I gives the results of the college database containing
+2 tables.
 
-**Discussion:**
-
-Deep learning models have made significant progress from two
-simple principles:
-1. Train on more data [22, 25].
-2. Train larger and deeper neural networks [23, 13].
-* Supervised data is expensive to acquire. SpeechStew takles this problem by simply mixing all publicly available speech recognition data. 
-* Our approach leverages on currently available resources, labelled and unlabelled. We hope our work will encourage future research to leverage on all training data available, as opposed to training on only task specific datasets.
-* Training large models is expensive, and impractical to do frequently (especially when one regularly encounters new tasks or new data). 
-* Our work on transfer learning demonstrates that one can simply finetune a pretrained model for only a few thousand gradient steps and achieve strong results. 
-* This is inexpensive and very practical. We hope our work will encourage further research to leverage on transfer learning in speech recognition.
 
 **Conclusion:**
 
-* Summarize the key findings of the research paper.
-* Emphasize the significance of audio-visual speech recognition in enhancing real-world applications.
-* Encourage further exploration of multimodal approaches in speech processing.
-* Remember that this is a general outline, and actual research papers on audio-visual speech recognition may vary in terms of their content and focus.
+Areas of improvement can be working on improving the
+grammar in order to ensure that even the more general query
+is being executed. Further we can work on DML like insertion,
+deletion of tables and attributes and DDL like create, alter of
+tables.
 
 **References:**
 
-* [1] A. Graves and N. Jaitly, “Towards End-to-End Speech Recognition with Recurrent Neural Networks,” in ICML, 2014.
-* [2] W. Chan, N. Jaitly, Q. Le, and O. Vinyals, “Listen, Attend and Spell: A Neural Network for Large Vocabulary    Conversational Speech Recognition,” in ICASSP, 2016.
-* [3] D. Park, W. Chan, Y. Zhang, C.-C. Chiu, B. Zoph, E. Cubuk, and Q. Le, “SpecAugment: A Simple Data Augmentation Method for Automatic Speech Recognition,” in INTERSPEECH, 2019.
-* [4] Y. Zhang, J. Qin, D. S. Park, W. Han, C.-C. Chiu, R. Pang, Q. V. Le, and Y. Wu, “Pushing the Limits of Semi-Supervised Learning for Automatic Speech Recognition,” in arXiv:2010.10504, 2020.
-* [5] C.-C. Chiu, T. Sainath, Y. Wu, R. Prabhavalkar, P. Nguyen, Z. Chen, A. Kannan, R. J. Weiss, K. Rao, E. Gonina, N. Jaitly, B. Li, J. Chorowski, and M. Bacchiani, “State-of-the-art Speech Recognition With Sequence-to-Sequence Models,” in ICASSP, 2018.
+* [1] J. Weizenbaum, “ELIZA - A computer program for the
+study of natural language communication between man
+and machine,” Communications of the ACM, vol. 9, no.
+1, pp. 36-45, January 1966..
+* [2]T. Winograd, “Procedures as a representation for data in
+a computer program for understanding natural language,”
+MIT AI Technical Report 235, February 1971.
+
+* [3] B.-B. Huang, G. Zang, and P. C.-Y. Sheu, “A natural
+language database interface based on probabilistic context free grammar,” IEEE International Workshop on
+Semantic Computing and Systems, Huangshan, China,
+14-15 July 2008.
+* [4] G. G. Hendrix, E. D. Sacerdoti, D. Sagalowicz, and J.
+Slocum, “Developing a natural language interface to complex data,” in ACM Transactions on Database Systems,
+vol. 3, no. 2, pp. 105-147, June 1978.
+* [5] N. T. Dang, and D. T. T. Tuyen, “Natural language question answering model applied to document retrieval
+system,” World Academy of Science, Engineering and
+Technology, vol. 51, pp. 36-39, 2009.
 
